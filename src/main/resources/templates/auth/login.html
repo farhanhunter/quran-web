@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Quran Web</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+    <nav class="main-nav">
+        <div class="nav-inner">
+            <a th:href="@{/}">Home</a>
+            <a th:href="@{/quran/surahs}">Quran</a>
+        </div>
+    </nav>
+    <main>
+        <div class="container">
+        <div class="auth-card">
+            <h2>Sign In</h2>
+
+            <!--/*@thymesVar id="loginError" type="java.lang.String"*/-->
+            <div th:if="${loginError}" class="alert alert--error" th:text="${loginError}"></div>
+            <!--/*@thymesVar id="registrationSuccess" type="java.lang.String"*/-->
+            <div th:if="${registrationSuccess}" class="alert alert--success" th:text="${registrationSuccess}"></div>
+
+            <form th:action="@{/auth/login}" method="post">
+                <div class="form-group">
+                    <label for="usernameOrEmail">Username or Email</label>
+                    <input type="text" id="usernameOrEmail" name="usernameOrEmail"
+                           autocomplete="username" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password"
+                           autocomplete="current-password" required>
+                </div>
+                <button type="submit" class="nav-button">Sign In</button>
+            </form>
+
+            <p style="margin-top: 1rem;">
+                Don't have an account? <a th:href="@{/auth/register}">Register</a>
+            </p>
+        </div>
+        </div><!-- /.container -->
+    </main>
+</body>
+</html>

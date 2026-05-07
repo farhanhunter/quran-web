@@ -1,0 +1,217 @@
+# ===========================================
+# application.yml - Default Configuration
+# ===========================================
+spring:
+  application:
+    name: quran-web
+
+  # Profile aktif (development default)
+  profiles:
+    active: dev
+
+  # Thymeleaf Configuration (global)
+  thymeleaf:
+    cache: false
+    prefix: classpath:/templates/
+    suffix: .html
+    mode: HTML
+    encoding: UTF-8
+
+  # File Upload Configuration (global)
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+
+# Server Configuration (global default)
+server:
+  port: 8080
+  compression:
+    enabled: true
+    mime-types: text/html,text/xml,text/plain,text/css,application/javascript,application/json
+
+# Logging (global default)
+logging:
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
+
+# Application Custom Properties (global)
+app:
+  quran:
+    default-translation: id
+    available-translations: id,en,ar
+    audio-base-url: https://cdn.quran.com/audio
+    cache-enabled: true
+
+---
+# ===========================================
+# Development Profile (localhost with H2)
+# ===========================================
+spring:
+  config:
+    activate:
+      on-profile: dev
+
+  # H2 Database untuk development (in-memory, PostgreSQL-compatible mode)
+  datasource:
+    url: jdbc:h2:mem:qurandb;MODE=PostgreSQL;DATABASE_TO_LOWER=TRUE;DEFAULT_NULL_ORDERING=HIGH
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
+        format_sql: true
+
+  flyway:
+    enabled: true
+
+logging:
+  level:
+    com.quran.web: DEBUG
+    org.springframework.web: INFO
+    org.hibernate.SQL: DEBUG
+  file:
+    name: logs/quran-web.log
+
+---
+# ===========================================
+# Development Profile (localhost with PostgreSQL)
+# ===========================================
+spring:
+  config:
+    activate:
+      on-profile: dev-postgres
+
+  # PostgreSQL untuk development (via Docker)
+  datasource:
+    url: jdbc:postgresql://localhost:5432/qurandb
+    username: quran_user
+    password: quran_pass
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 5
+      minimum-idle: 2
+      connection-timeout: 20000
+
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect  # PostgreSQL dialect
+        format_sql: false
+
+logging:
+  level:
+    com.quran.web: DEBUG
+    org.springframework.web: INFO
+    org.hibernate.SQL: DEBUG
+  file:
+    name: logs/quran-web.log
+
+---
+# ===========================================
+# Production Profile (Cloud Ready)
+# ===========================================
+spring:
+  config:
+    activate:
+      on-profile: prod
+
+  # Database dari Environment Variables
+  datasource:
+    url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/qurandb}
+    username: ${DATABASE_USERNAME:quran_user}
+    password: ${DATABASE_PASSWORD:quran_pass}
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 5
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
+
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+  thymeleaf:
+    cache: true  # Enable cache in production
+
+# Production server config
+server:
+  port: ${PORT:8080}
+  compression:
+    enabled: true
+  shutdown: graceful
+  tomcat:
+    max-connections: 10000
+    threads:
+      max: 200
+      min-spare: 10
+
+# Production logging
+logging:
+  level:
+    com.quran.web: INFO
+    org.springframework.web: WARN
+    org.hibernate.SQL: WARN
+  file:
+    name: /var/log/quran-web/app.log
+    max-size: 10MB
+    max-history: 30
+
+# Production custom properties
+app:
+  quran:
+    cache-enabled: true
+    audio-base-url: ${AUDIO_CDN_URL:https://cdn.quran.com/audio}
+
+---
+# ===========================================
+# Staging Profile (untuk testing di cloud)
+# ===========================================
+spring:
+  config:
+    activate:
+      on-profile: staging
+
+  datasource:
+    url: ${DATABASE_URL}
+    username: ${DATABASE_USERNAME}
+    password: ${DATABASE_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 5
+
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+server:
+  port: ${PORT:8080}
+
+logging:
+  level:
+    com.quran.web: DEBUG
+    org.springframework.web: INFO

@@ -1,0 +1,30 @@
+# Maven
+target/
+.mvn/wrapper/maven-wrapper.jar
+
+# Logs
+logs/
+*.log
+*.log.gz
+
+# IntelliJ IDEA
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# VS Code
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Application secrets (jangan commit)
+application-secrets.yml
+application-secrets.properties

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Surah List - Quran Web</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <script th:src="@{/js/bookmark.js}" defer></script>
+</head>
+<body>
+    <nav class="main-nav">
+        <div class="nav-inner">
+            <a th:href="@{/}">Home</a>
+            <a th:href="@{/quran/surahs}">Quran</a>
+            <a th:href="@{/translations/languages}">Languages</a>
+            <a th:href="@{/health}">Health</a>
+        </div>
+    </nav>
+    <main th:data-logged-in="${#authorization.expression('isAuthenticated()')}">
+    <div class="container">
+        <div sec:authorize="isAnonymous()" id="continue-reading-banner" class="continue-reading-banner" hidden role="region" aria-label="Continue reading">
+            <div class="continue-reading-banner__info">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                     fill="none" stroke="currentColor" stroke-width="2"
+                     stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
+                </svg>
+                <div>
+                    <div class="continue-reading-banner__label">Continue Reading</div>
+                    <div class="continue-reading-banner__position">
+                        <span data-cp-name></span> &bull; <span data-cp-ayah></span>
+                    </div>
+                </div>
+            </div>
+            <div class="continue-reading-banner__actions">
+                <a href="#" class="continue-reading-banner__resume" data-cp-link>Resume</a>
+                <button type="button" class="continue-reading-banner__clear" data-cp-clear>Clear</button>
+            </div>
+        </div>
+        <h2>Surah List</h2>
+        <div class="surah-grid">
+            <div th:each="surah : ${surahs}" class="surah-card">
+                <a th:href="@{/quran/surah/{number}(number=${surah.surahNumber})}">
+                    <span th:text="${surah.surahNumber}">1</span>.
+                    <span th:text="${surah.nameLatin}">Al-Fatihah</span>
+                    <span th:text="${surah.nameArabic}" class="arabic">الفاتحة</span>
+                </a>
+            </div>
+        </div>
+    </div><!-- /.container -->
+    </main>
+</body>
+</html>

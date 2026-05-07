@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quran Web - Home</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <meta name="_csrf" th:content="${_csrf.token}">
+    <meta name="_csrf_header" th:content="${_csrf.headerName}">
+    <script th:src="@{/js/bookmark.js}" defer></script>
+</head>
+<body>
+    <nav class="main-nav">
+        <div class="nav-inner">
+            <a th:href="@{/}">Home</a>
+            <a th:href="@{/quran/surahs}">Quran</a>
+            <a th:href="@{/translations/languages}">Languages</a>
+            <a th:href="@{/health}">Health</a>
+            <span sec:authorize="isAuthenticated()" style="margin-left:auto; display:flex; align-items:center; gap:0.75rem;">
+                <span sec:authentication="name" style="font-weight:600;"></span>
+                <a th:href="@{/bookmarks}" class="btn-login">Bookmarks</a>
+                <a href="#" class="btn-logout" data-logout>Logout</a>
+            </span>
+            <span sec:authorize="isAnonymous()" style="margin-left:auto; display:flex; gap:0.5rem; align-items:center;">
+                <a th:href="@{/auth/login}" class="btn-login">Login</a>
+                <a th:href="@{/auth/register}" class="btn-register">Register</a>
+            </span>
+        </div>
+    </nav>
+    <main th:data-logged-in="${loggedIn}">
+    <div class="container">
+
+        <!-- Server-side banner for authenticated users (from DB) -->
+        <div th:if="${dbLastRead != null}" class="continue-reading-banner" role="region"
+             aria-label="Continue reading">
+            <div class="continue-reading-banner__info">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                     fill="none" stroke="currentColor" stroke-width="2"
+                     stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
+                </svg>
+                <div>
+                    <div class="continue-reading-banner__label">Continue Reading</div>
+                    <div class="continue-reading-banner__position">
+                        <span th:text="${dbLastRead.surahNameLatin}"></span>
+                        &bull;
+                        <span th:text="'Ayah ' + ${dbLastRead.ayahNumber}"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="continue-reading-banner__actions">
+                <a th:href="${dbLastRead.resumeUrl}" class="continue-reading-banner__resume">Resume</a>
+            </div>
+        </div>
+
+        <!-- Client-side banner for guests (localStorage) — not rendered when logged in -->
+        <div sec:authorize="isAnonymous()" id="continue-reading-banner" class="continue-reading-banner" hidden role="region"
+             aria-label="Continue reading">
+            <div class="continue-reading-banner__info">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                     fill="none" stroke="currentColor" stroke-width="2"
+                     stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
+                </svg>
+                <div>
+                    <div class="continue-reading-banner__label">Continue Reading</div>
+                    <div class="continue-reading-banner__position">
+                        <span data-cp-name></span> &bull; <span data-cp-ayah></span>
+                    </div>
+                </div>
+            </div>
+            <div class="continue-reading-banner__actions">
+                <a href="#" class="continue-reading-banner__resume" data-cp-link>Resume</a>
+                <button type="button" class="continue-reading-banner__clear" data-cp-clear>Clear</button>
+            </div>
+        </div>
+
+        <div class="navigation-hub">
+            <div class="nav-card">
+                <h2>Quran</h2>
+                <p>Read the Holy Quran with translations.</p>
+                <a th:href="@{/quran/surahs}" class="nav-button">Surah List</a>
+            </div>
+            <div class="nav-card">
+                <h2>Translations</h2>
+                <p>Explore available translation languages.</p>
+                <a th:href="@{/translations/languages}" class="nav-button">Languages</a>
+            </div>
+            <div class="nav-card">
+                <h2>System</h2>
+                <p>Check the health status of the application.</p>
+                <a th:href="@{/health}" class="nav-button">Health Status</a>
+            </div>
+        </div>
+    </div><!-- /.container -->
+    </main>
+</body>
+</html>

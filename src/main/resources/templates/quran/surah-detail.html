@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${surah.nameLatin + ' - Quran Web'}">Al-Fatihah - Quran Web</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <meta name="_csrf" th:content="${_csrf.token}">
+    <meta name="_csrf_header" th:content="${_csrf.headerName}">
+    <script th:src="@{/js/bookmark.js}" defer></script>
+</head>
+<body>
+    <nav class="main-nav">
+        <div class="nav-inner">
+            <a th:href="@{/}">Home</a>
+            <a th:href="@{/quran/surahs}">Quran</a>
+            <a th:href="@{/translations/languages}">Languages</a>
+            <a th:href="@{/health}">Health</a>
+        </div>
+    </nav>
+    <header>
+        <div class="container">
+            <a th:href="@{/quran/surahs}" class="back-link">Back to Surah List</a>
+            <h1 th:text="${surah.nameLatin}">Al-Fatihah</h1>
+            <p th:text="${surah.nameArabic}" class="arabic">الفاتحة</p>
+            <p th:text="${surah.totalAyahs + ' Ayahs • ' + surah.revelationType}">7 Ayahs • MAKKIYAH</p>
+            <div class="language-switcher">
+                <a th:href="@{'/quran/surah/' + ${surah.surahNumber}(languageCode='id')}"
+                   th:classappend="${surah.currentLanguage == 'id' ? 'active' : ''}">ID</a>
+                <a th:href="@{'/quran/surah/' + ${surah.surahNumber}(languageCode='en')}"
+                   th:classappend="${surah.currentLanguage == 'en' ? 'active' : ''}">EN</a>
+                <a th:href="@{'/quran/surah/' + ${surah.surahNumber}(languageCode='ar')}"
+                   th:classappend="${surah.currentLanguage == 'ar' ? 'active' : ''}">AR</a>
+            </div>
+        </div>
+    </header>
+    <main th:data-logged-in="${#authorization.expression('isAuthenticated()')}">
+    <div class="container">
+        <button sec:authorize="isAuthenticated()"
+                id="clear-all-bookmarks-btn"
+                type="button"
+                class="continue-reading-banner__clear"
+                hidden>Clear all bookmarks</button>
+        <div th:if="${surah.basmala != null}" class="basmala-container">
+            <p th:text="${surah.basmala}" class="arabic basmala"></p>
+        </div>
+        <div th:each="ayah : ${surah.ayahs}" class="ayah-container" th:id="'ayah-' + ${ayah.ayahNumber}">
+            <div class="ayah-header">
+                <span th:text="${surah.surahNumber + ':' + ayah.ayahNumber}">1:1</span>
+                <button class="bookmark-btn" type="button"
+                        th:data-surah-number="${surah.surahNumber}"
+                        th:data-ayah-number="${ayah.ayahNumber}"
+                        th:data-surah-name="${surah.nameArabic}"
+                        th:data-surah-name-latin="${surah.nameLatin}"
+                        th:aria-label="'Bookmark ayah ' + ${ayah.ayahNumber}"
+                        aria-pressed="false">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24"
+                         fill="none" stroke="currentColor" stroke-width="2.5"
+                         stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
+                    </svg>
+                    Bookmark
+                </button>
+            </div>
+            <p th:text="${ayah.textArabic}" class="arabic text-right">بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ</p>
+            <p th:text="${ayah.translation}">In the name of Allah, the Entirely Merciful, the Especially Merciful.</p>
+        </div>
+    </div><!-- /.container -->
+    </main>
+</body>
+</html>

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Health Status - Quran Web</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+    <nav class="main-nav">
+        <div class="nav-inner">
+            <a th:href="@{/}">Home</a>
+            <a th:href="@{/quran/surahs}">Quran</a>
+            <a th:href="@{/translations/languages}">Languages</a>
+            <a th:href="@{/health}">Health</a>
+        </div>
+    </nav>
+    <header>
+        <div class="container">
+            <h1>System Health</h1>
+        </div>
+    </header>
+    <main>
+        <div class="container">
+            <div class="status-box">
+                <p>Status: <span th:text="${health.status}" th:class="${health.status == 'UP' ? 'status-up' : 'status-down'}">UP</span></p>
+                <p>Timestamp: <span th:text="${health.timestamp}">2026-01-19 12:30:00</span></p>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

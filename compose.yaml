@@ -1,0 +1,75 @@
+# ===========================================
+# Docker Compose untuk Development
+# ===========================================
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:16-alpine
+    container_name: quran-postgres
+    environment:
+      POSTGRES_DB: qurandb
+      POSTGRES_USER: quran_user
+      POSTGRES_PASSWORD: quran_pass
+      POSTGRES_INITDB_ARGS: "--encoding=UTF8"
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init-scripts:/docker-entrypoint-initdb.d
+    networks:
+      - quran-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U quran_user -d qurandb"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Spring Boot Application (optional - untuk test full container)
+  quran-web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: quran-web-app
+    environment:
+      SPRING_PROFILES_ACTIVE: dev-postgres
+      DATABASE_URL: jdbc:postgresql://postgres:5432/qurandb
+      DATABASE_USERNAME: quran_user
+      DATABASE_PASSWORD: quran_pass
+    ports:
+      - "8080:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - quran-network
+    volumes:
+      - ./logs:/var/log/quran-web
+    restart: unless-stopped
+
+  # pgAdmin (optional - untuk manage database via UI)
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: quran-pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@quran.local
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "5050:80"
+    depends_on:
+      - postgres
+    networks:
+      - quran-network
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+
+networks:
+  quran-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+    driver: local
+  pgadmin_data:
+    driver: local

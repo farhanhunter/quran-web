@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Bookmarks - Quran Web</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <meta name="_csrf" th:content="${_csrf.token}">
+    <meta name="_csrf_header" th:content="${_csrf.headerName}">
+</head>
+<body>
+    <nav class="main-nav">
+        <div class="nav-inner">
+            <a th:href="@{/}">Home</a>
+            <a th:href="@{/quran/surahs}">Quran</a>
+            <a th:href="@{/translations/languages}">Languages</a>
+            <a th:href="@{/health}">Health</a>
+            <span style="margin-left:auto; display:flex; align-items:center; gap:0.75rem;">
+                <a href="#" class="btn-logout" data-logout>Logout</a>
+            </span>
+        </div>
+    </nav>
+    <header>
+        <div class="container">
+            <h1>My Bookmarks</h1>
+            <p sec:authentication="name"></p>
+        </div>
+    </header>
+    <main>
+    <div class="container">
+        <!-- Empty state -->
+        <div th:if="${#lists.isEmpty(bookmarks)}" style="text-align:center; padding:3rem 1rem; color:#888;">
+            <p>No bookmarks yet.</p>
+            <a th:href="@{/quran/surahs}" class="nav-button">Start Reading</a>
+        </div>
+
+        <!-- Bookmark list -->
+        <div th:if="${not #lists.isEmpty(bookmarks)}">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
+                <p th:text="${#lists.size(bookmarks)} + ' bookmark(s)'"></p>
+                <button id="clear-all-btn" type="button" class="continue-reading-banner__clear">
+                    Clear all
+                </button>
+            </div>
+
+            <div class="bookmark-list">
+                <div th:each="bm : ${bookmarks}" class="bookmark-item"
+                     th:data-bookmark-id="${bm.id}" th:data-ayah-id="${bm.ayahId}" th:id="'bm-' + ${bm.id}">
+                    <div class="bookmark-item__info">
+                        <a th:href="@{'/quran/surah/' + ${bm.surahNumber} + '#ayah-' + ${bm.ayahNumber}}"
+                           class="bookmark-item__link">
+                            <span class="bookmark-item__surah" th:text="${bm.surahName}"></span>
+                            <span class="bookmark-item__ayah" th:text="'Ayah ' + ${bm.ayahNumber}"></span>
+                        </a>
+                        <p th:text="${bm.ayahTextArabic}" class="arabic bookmark-item__arabic"></p>
+                        <div class="bookmark-item__notes">
+                            <p class="bookmark-item__notes-text"
+                               th:text="${bm.notes}" th:if="${bm.notes != null and !bm.notes.isEmpty()}"></p>
+                            <p class="bookmark-item__notes-empty" th:if="${bm.notes == null or bm.notes.isEmpty()}"
+                               style="color:#aaa; font-style:italic; font-size:0.85rem;">No notes</p>
+                            <button type="button" class="edit-notes-btn" style="font-size:0.75rem; color:#0d9488; background:none; border:none; cursor:pointer; padding:0; margin-top:0.25rem;">Edit notes</button>
+                            <div class="notes-editor" style="display:none; margin-top:0.5rem;">
+                                <textarea class="notes-textarea" rows="3"
+                                          th:text="${bm.notes}"
+                                          placeholder="Add a note..."
+                                          style="width:100%; box-sizing:border-box; padding:0.4rem; border:1px solid #ccc; border-radius:4px; font-size:0.85rem; resize:vertical;"></textarea>
+                                <button type="button" class="save-notes-btn nav-button" style="margin-top:0.3rem; padding:0.3rem 0.75rem; font-size:0.8rem;">Save</button>
+                                <button type="button" class="cancel-notes-btn" style="margin-top:0.3rem; padding:0.3rem 0.75rem; font-size:0.8rem; background:none; border:1px solid #ccc; border-radius:4px; cursor:pointer;">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="button" class="delete-bookmark-btn continue-reading-banner__clear"
+                            th:data-bookmark-id="${bm.id}"
+                            aria-label="Delete bookmark">✕</button>
+                </div>
+            </div>
+        </div>
+    </div><!-- /.container -->
+    </main>
+
+    <script>
+        const csrf = {
+            token:  document.querySelector('meta[name="_csrf"]')?.content,
+            header: document.querySelector('meta[name="_csrf_header"]')?.content
+        };
+
+        async function deleteBookmark(id) {
+            const res = await fetch('/api/bookmark/' + id, {
+                method: 'DELETE',
+                headers: { [csrf.header]: csrf.token }
+            });
+            return res.ok;
+        }
+
+        async function clearAll() {
+            const res = await fetch('/api/bookmarks', {
+                method: 'DELETE',
+                headers: { [csrf.header]: csrf.token }
+            });
+            return res.ok;
+        }
+
+        document.querySelectorAll('[data-logout]').forEach(el => {
+            el.addEventListener('click', e => {
+                e.preventDefault();
+                fetch('/auth/logout', {
+                    method: 'POST',
+                    headers: { [csrf.header]: csrf.token }
+                }).then(() => window.location.href = '/');
+            });
+        });
+
+        async function saveNotes(ayahId, notes) {
+            const res = await fetch('/api/bookmark/notes', {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json', [csrf.header]: csrf.token },
+                body: JSON.stringify({ ayahId: Number(ayahId), notes: notes })
+            });
+            return res.ok;
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Individual delete buttons
+            document.querySelectorAll('.delete-bookmark-btn').forEach(btn => {
+                btn.addEventListener('click', async () => {
+                    const id = btn.dataset.bookmarkId;
+                    const ok = await deleteBookmark(id);
+                    if (ok) {
+                        document.getElementById('bm-' + id)?.remove();
+                        updateCount();
+                    }
+                });
+            });
+
+            // Notes edit buttons
+            document.querySelectorAll('.bookmark-item').forEach(item => {
+                const ayahId    = item.dataset.ayahId;
+                const editBtn   = item.querySelector('.edit-notes-btn');
+                const editor    = item.querySelector('.notes-editor');
+                const textarea  = item.querySelector('.notes-textarea');
+                const saveBtn   = item.querySelector('.save-notes-btn');
+                const cancelBtn = item.querySelector('.cancel-notes-btn');
+                const notesText = item.querySelector('.bookmark-item__notes-text');
+                const notesEmpty = item.querySelector('.bookmark-item__notes-empty');
+
+                editBtn.addEventListener('click', () => {
+                    editor.style.display = 'block';
+                    editBtn.style.display = 'none';
+                    textarea.focus();
+                });
+
+                cancelBtn.addEventListener('click', () => {
+                    editor.style.display = 'none';
+                    editBtn.style.display = '';
+                });
+
+                saveBtn.addEventListener('click', async () => {
+                    const newNotes = textarea.value.trim();
+                    const ok = await saveNotes(ayahId, newNotes || null);
+                    if (ok) {
+                        if (notesText) {
+                            if (newNotes) {
+                                notesText.textContent = newNotes;
+                                notesText.style.display = '';
+                                if (notesEmpty) notesEmpty.style.display = 'none';
+                            } else {
+                                notesText.style.display = 'none';
+                                if (notesEmpty) notesEmpty.style.display = '';
+                            }
+                        } else if (newNotes) {
+                            const p = document.createElement('p');
+                            p.className = 'bookmark-item__notes-text';
+                            p.textContent = newNotes;
+                            item.querySelector('.bookmark-item__notes').prepend(p);
+                            if (notesEmpty) notesEmpty.style.display = 'none';
+                        }
+                        editor.style.display = 'none';
+                        editBtn.style.display = '';
+                    }
+                });
+            });
+
+            // Clear all button
+            document.getElementById('clear-all-btn')?.addEventListener('click', async () => {
+                const ok = await clearAll();
+                if (ok) {
+                    document.querySelectorAll('.bookmark-item').forEach(el => el.remove());
+                    updateCount();
+                }
+            });
+        });
+
+        function updateCount() {
+            const remaining = document.querySelectorAll('.bookmark-item').length;
+            if (remaining === 0) {
+                location.reload(); // show empty state
+            } else {
+                const countEl = document.querySelector('p[th\\:text]') ??
+                                document.querySelector('.bookmark-list')?.previousElementSibling?.querySelector('p');
+                if (countEl) countEl.textContent = remaining + ' bookmark(s)';
+            }
+        }
+    </script>
+</body>
+</html>

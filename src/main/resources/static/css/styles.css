@@ -1,0 +1,396 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f7f6;
+}
+
+.container {
+    max-width: min(80%, 1230px);
+    margin-inline: auto;
+    padding-inline: 1.25rem;
+    padding-block: 1.25rem;
+}
+
+@media (max-width: 767px) {
+    .container {
+        max-width: 100%;
+        padding-inline: 1rem;
+    }
+}
+
+header {
+    background: #02978A;
+    color: #fff;
+    padding: 1.5rem 0;
+    text-align: center;
+    margin-bottom: 0;
+    border-radius: 0;
+    position: relative;
+}
+
+header .container {
+    padding-block: 0;
+}
+
+header a.back-link {
+    color: #fff;
+    text-decoration: none;
+    position: absolute;
+    left: 1rem;
+    top: 1rem;
+}
+
+.language-switcher {
+    margin-top: 1rem;
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.language-switcher a {
+    position: static;
+    display: inline-block;
+    padding: 0.3rem 0.8rem;
+    background: rgba(255, 255, 255, 0.2);
+    color: #fff;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    transition: background 0.3s;
+}
+
+.language-switcher a:hover {
+    background: rgba(255, 255, 255, 0.4);
+}
+
+.language-switcher a.active {
+    background: #fff;
+    color: #02978A;
+}
+
+.surah-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+}
+
+.surah-card {
+    background: #fff;
+    padding: 1rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    transition: transform 0.2s;
+}
+
+.surah-card:hover {
+    transform: translateY(-5px);
+}
+
+.surah-card a {
+    text-decoration: none;
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.arabic {
+    font-size: 1.5rem;
+    margin-top: 0.5rem;
+}
+
+.text-right {
+    text-align: right;
+}
+
+.ayah-container {
+    background: #fff;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.ayah-header {
+    font-weight: bold;
+    color: #02978A;
+    margin-bottom: 0.5rem;
+}
+
+.status-box {
+    background: #fff;
+    padding: 2rem;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.status-up {
+    color: green;
+    font-weight: bold;
+}
+
+.status-down {
+    color: red;
+    font-weight: bold;
+}
+
+/* Navigation Hub styles */
+.navigation-hub {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.nav-card {
+    background: #fff;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    text-align: center;
+    transition: transform 0.3s;
+}
+
+.nav-card:hover {
+    transform: translateY(-10px);
+}
+
+.nav-button {
+    display: inline-block;
+    margin-top: 1rem;
+    padding: 0.8rem 1.5rem;
+    background: #02978A;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 25px;
+    font-weight: bold;
+    transition: background 0.3s;
+}
+
+.nav-button:hover {
+    background: #027a6e;
+}
+
+nav.main-nav {
+    background: #fff;
+    padding: 0.75rem 0;
+    margin-bottom: 0;
+    border-radius: 0;
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+nav.main-nav .nav-inner {
+    width: min(80%, 1230px);
+    margin-inline: auto;
+    padding-inline: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+@media (max-width: 767px) {
+    nav.main-nav .nav-inner {
+        width: 100%;
+        padding-inline: 1rem;
+    }
+}
+
+nav.main-nav a {
+    text-decoration: none;
+    color: #02978A;
+    font-weight: bold;
+    transition: color 0.3s;
+}
+
+nav.main-nav a:hover {
+    color: #027a6e;
+}
+
+.basmala-container {
+    text-align: center;
+    background: #fff;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.basmala {
+    font-size: 1.8rem;
+    color: #02978A;
+    margin: 0;
+}
+
+/* ── Auth nav buttons (Login / Register) ── */
+.btn-login {
+    display: inline-block;
+    padding: 0.4rem 1.1rem;
+    border: 2px solid #555;
+    border-radius: 20px;
+    background: transparent;
+    color: #555;
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-decoration: none;
+    transition: border-color 0.2s, color 0.2s;
+}
+
+.btn-login:hover {
+    border-color: #02978A;
+    color: #02978A;
+}
+
+.btn-logout {
+    display: inline-block;
+    padding: 0.4rem 1.1rem;
+    border: 2px solid #1f2937;
+    border-radius: 20px;
+    background: transparent;
+    color: #1f2937;
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+}
+
+.btn-logout:hover {
+    background: #1f2937;
+    color: #fff;
+}
+
+.btn-register {
+    display: inline-block;
+    padding: 0.4rem 1.1rem;
+    border: 2px solid #1f2937;
+    border-radius: 20px;
+    background: #1f2937;
+    color: #fff;
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-decoration: none;
+    transition: background 0.2s, border-color 0.2s;
+}
+
+.btn-register:hover {
+    background: #374151;
+    border-color: #374151;
+}
+
+/* ── Bookmark button ── */
+.bookmark-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.25rem 0.7rem;
+    border: 2px solid #aaa;
+    border-radius: 20px;
+    background: transparent;
+    color: #555;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: border-color 0.2s, color 0.2s, background 0.2s;
+}
+
+.bookmark-btn:hover {
+    border-color: #02978A;
+    color: #02978A;
+}
+
+.bookmark-btn--active {
+    border-color: #02978A;
+    background: #02978A;
+    color: #fff;
+}
+
+.ayah-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.ayah-container--bookmarked {
+    border-left: 4px solid #02978A;
+    background: #e8f7f5;
+}
+
+/* ── Continue Reading banner ── */
+[hidden] { display: none; }
+
+.continue-reading-banner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    border: 2px solid #02978A;
+    border-radius: 10px;
+    background: #e8f7f5;
+    padding: 1rem 1.25rem;
+    margin-bottom: 1.5rem;
+}
+
+.continue-reading-banner__info {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: #02978A;
+}
+
+.continue-reading-banner__label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: bold;
+    opacity: 0.7;
+}
+
+.continue-reading-banner__position {
+    font-weight: bold;
+    font-size: 1rem;
+}
+
+.continue-reading-banner__actions {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+}
+
+.continue-reading-banner__resume {
+    padding: 0.4rem 1rem;
+    background: #02978A;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: bold;
+    transition: background 0.2s;
+}
+
+.continue-reading-banner__resume:hover {
+    background: #027a6e;
+}
+
+.continue-reading-banner__clear {
+    padding: 0.4rem 0.9rem;
+    border: 2px solid #02978A;
+    border-radius: 20px;
+    background: transparent;
+    color: #02978A;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+}
+
+.continue-reading-banner__clear:hover {
+    background: #02978A;
+    color: #fff;
+}

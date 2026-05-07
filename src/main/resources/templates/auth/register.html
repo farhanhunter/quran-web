@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - Quran Web</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+    <nav class="main-nav">
+        <div class="nav-inner">
+            <a th:href="@{/}">Home</a>
+            <a th:href="@{/quran/surahs}">Quran</a>
+        </div>
+    </nav>
+    <main>
+        <div class="container">
+        <div class="auth-card">
+            <h2>Create Account</h2>
+
+            <!--/*@thymesVar id="registerError" type="java.lang.String"*/-->
+            <div th:if="${registerError}" class="alert alert--error" th:text="${registerError}"></div>
+
+            <form th:action="@{/auth/register}" th:object="${registerRequest}" method="post">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" th:field="*{username}"
+                           autocomplete="username">
+                    <span class="field-error" th:if="${#fields.hasErrors('username')}"
+                          th:errors="*{username}"></span>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" th:field="*{email}"
+                           autocomplete="email">
+                    <span class="field-error" th:if="${#fields.hasErrors('email')}"
+                          th:errors="*{email}"></span>
+                </div>
+                <div class="form-group">
+                    <label for="fullName">Full Name <span style="color:#888">(optional)</span></label>
+                    <input type="text" id="fullName" th:field="*{fullName}"
+                           autocomplete="name">
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" th:field="*{password}"
+                           autocomplete="new-password">
+                    <span class="field-error" th:if="${#fields.hasErrors('password')}"
+                          th:errors="*{password}"></span>
+                </div>
+                <button type="submit" class="nav-button">Create Account</button>
+            </form>
+
+            <p style="margin-top: 1rem;">
+                Already have an account? <a th:href="@{/auth/login}">Sign In</a>
+            </p>
+        </div>
+        </div><!-- /.container -->
+    </main>
+</body>
+</html>
