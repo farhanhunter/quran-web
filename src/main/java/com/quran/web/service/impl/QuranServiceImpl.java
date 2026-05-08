@@ -54,6 +54,13 @@ public class QuranServiceImpl implements QuranService {
     }
 
     @Override
+    public List<SurahResponse> searchSurahsByName(String name) {
+        return surahRepository.findByNameContaining(name).stream()
+                .map(quranMapper::toSurahResponse)
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public SurahDetailResponse getSurahDetail(Integer surahNumber, String languageCode) {
         log.info("Fetching surah detail: {}, language: {}", surahNumber, languageCode);
 

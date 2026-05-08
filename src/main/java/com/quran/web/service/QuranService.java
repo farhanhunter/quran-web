@@ -8,6 +8,7 @@ import java.util.List;
 
 public interface QuranService {
     List<SurahResponse> getAllSurahs();
+    List<SurahResponse> searchSurahsByName(String name);
     SurahDetailResponse getSurahDetail(Integer surahNumber, String languageCode);
     AyahDetailResponse getAyahDetail(AyahQueryRequest request);
     PageResponse<AyahResponse> searchAyahs(SearchRequest request);

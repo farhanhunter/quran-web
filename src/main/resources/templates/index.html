@@ -9,6 +9,7 @@
     <meta name="_csrf" th:content="${_csrf.token}">
     <meta name="_csrf_header" th:content="${_csrf.headerName}">
     <script th:src="@{/js/bookmark.js}" defer></script>
+    <script th:src="@{/js/search.js}" defer></script>
 </head>
 <body>
     <nav class="main-nav">
@@ -17,12 +18,17 @@
             <a th:href="@{/quran/surahs}">Quran</a>
             <a th:href="@{/translations/languages}">Languages</a>
             <a th:href="@{/health}">Health</a>
-            <span sec:authorize="isAuthenticated()" style="margin-left:auto; display:flex; align-items:center; gap:0.75rem;">
+            <div class="nav-search">
+                <label>
+                    <input type="text" class="nav-search-input" placeholder="Surah or 2:255…" autocomplete="off">
+                </label>
+            </div>
+            <span sec:authorize="isAuthenticated()" style="display:flex; align-items:center; gap:0.75rem;">
                 <span sec:authentication="name" style="font-weight:600;"></span>
                 <a th:href="@{/bookmarks}" class="btn-login">Bookmarks</a>
                 <a href="#" class="btn-logout" data-logout>Logout</a>
             </span>
-            <span sec:authorize="isAnonymous()" style="margin-left:auto; display:flex; gap:0.5rem; align-items:center;">
+            <span sec:authorize="isAnonymous()" style="display:flex; gap:0.5rem; align-items:center;">
                 <a th:href="@{/auth/login}" class="btn-login">Login</a>
                 <a th:href="@{/auth/register}" class="btn-register">Register</a>
             </span>

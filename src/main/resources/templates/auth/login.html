@@ -5,12 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Quran Web</title>
     <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <script th:src="@{/js/search.js}" defer></script>
 </head>
 <body>
     <nav class="main-nav">
         <div class="nav-inner">
             <a th:href="@{/}">Home</a>
             <a th:href="@{/quran/surahs}">Quran</a>
+            <div class="nav-search">
+                <input type="text" class="nav-search-input" placeholder="Surah or 2:255…" autocomplete="off">
+            </div>
         </div>
     </nav>
     <main>

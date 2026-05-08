@@ -9,6 +9,7 @@
     <meta name="_csrf" th:content="${_csrf.token}">
     <meta name="_csrf_header" th:content="${_csrf.headerName}">
     <script th:src="@{/js/bookmark.js}" defer></script>
+    <script th:src="@{/js/search.js}" defer></script>
 </head>
 <body>
     <nav class="main-nav">
@@ -17,6 +18,11 @@
             <a th:href="@{/quran/surahs}">Quran</a>
             <a th:href="@{/translations/languages}">Languages</a>
             <a th:href="@{/health}">Health</a>
+            <div class="nav-search">
+                <label>
+                    <input type="text" class="nav-search-input" placeholder="Surah or 2:255…" autocomplete="off">
+                </label>
+            </div>
         </div>
     </nav>
     <header>
