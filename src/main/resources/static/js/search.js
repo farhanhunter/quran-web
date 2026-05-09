@@ -48,7 +48,30 @@
         ul.style.display = 'block';
     }
 
+    function initNavToggle() {
+        document.querySelectorAll('.nav-toggle').forEach(btn => {
+            const navLinks = btn.closest('.nav-inner').querySelector('.nav-links');
+            if (!navLinks) return;
+            btn.addEventListener('click', e => {
+                e.stopPropagation();
+                const open = navLinks.classList.toggle('open');
+                btn.classList.toggle('open', open);
+                btn.setAttribute('aria-expanded', String(open));
+            });
+        });
+        document.addEventListener('click', e => {
+            if (!e.target.closest('.nav-inner')) {
+                document.querySelectorAll('.nav-links.open').forEach(el => {
+                    el.classList.remove('open');
+                    const btn = el.closest('.nav-inner').querySelector('.nav-toggle');
+                    if (btn) { btn.classList.remove('open'); btn.setAttribute('aria-expanded', 'false'); }
+                });
+            }
+        });
+    }
+
     function init() {
+        initNavToggle();
         document.querySelectorAll('.nav-search-input').forEach(input => {
             const wrapper = input.closest('.nav-search');
             const ul = document.createElement('ul');

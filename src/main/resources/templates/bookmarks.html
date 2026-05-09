@@ -13,16 +13,21 @@
 <body>
     <nav class="main-nav">
         <div class="nav-inner">
-            <a th:href="@{/}">Home</a>
-            <a th:href="@{/quran/surahs}">Quran</a>
-            <a th:href="@{/translations/languages}">Languages</a>
-            <a th:href="@{/health}">Health</a>
+            <button class="nav-toggle" aria-label="Menu" aria-expanded="false">
+                <span></span><span></span><span></span>
+            </button>
+            <div class="nav-links">
+                <a th:href="@{/}">Home</a>
+                <a th:href="@{/quran/surahs}">Quran</a>
+                <a th:href="@{/translations/languages}">Languages</a>
+                <a th:href="@{/health}">Health</a>
+                <span class="nav-auth">
+                    <a href="#" class="btn-logout" data-logout>Logout</a>
+                </span>
+            </div>
             <div class="nav-search">
                 <input type="text" class="nav-search-input" placeholder="Surah or 2:255…" autocomplete="off">
             </div>
-            <span style="display:flex; align-items:center; gap:0.75rem;">
-                <a href="#" class="btn-logout" data-logout>Logout</a>
-            </span>
         </div>
     </nav>
     <header>

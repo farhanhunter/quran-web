@@ -14,24 +14,27 @@
 <body>
     <nav class="main-nav">
         <div class="nav-inner">
-            <a th:href="@{/}">Home</a>
-            <a th:href="@{/quran/surahs}">Quran</a>
-            <a th:href="@{/translations/languages}">Languages</a>
-            <a th:href="@{/health}">Health</a>
-            <div class="nav-search">
-                <label>
-                    <input type="text" class="nav-search-input" placeholder="Surah or 2:255…" autocomplete="off">
-                </label>
+            <button class="nav-toggle" aria-label="Menu" aria-expanded="false">
+                <span></span><span></span><span></span>
+            </button>
+            <div class="nav-links">
+                <a th:href="@{/}">Home</a>
+                <a th:href="@{/quran/surahs}">Quran</a>
+                <a th:href="@{/translations/languages}">Languages</a>
+                <a th:href="@{/health}">Health</a>
+                <span sec:authorize="isAuthenticated()" class="nav-auth">
+                    <span sec:authentication="name" style="font-weight:600;"></span>
+                    <a th:href="@{/bookmarks}" class="btn-login">Bookmarks</a>
+                    <a href="#" class="btn-logout" data-logout>Logout</a>
+                </span>
+                <span sec:authorize="isAnonymous()" class="nav-auth">
+                    <a th:href="@{/auth/login}" class="btn-login">Login</a>
+                    <a th:href="@{/auth/register}" class="btn-register">Register</a>
+                </span>
             </div>
-            <span sec:authorize="isAuthenticated()" style="display:flex; align-items:center; gap:0.75rem;">
-                <span sec:authentication="name" style="font-weight:600;"></span>
-                <a th:href="@{/bookmarks}" class="btn-login">Bookmarks</a>
-                <a href="#" class="btn-logout" data-logout>Logout</a>
-            </span>
-            <span sec:authorize="isAnonymous()" style="display:flex; gap:0.5rem; align-items:center;">
-                <a th:href="@{/auth/login}" class="btn-login">Login</a>
-                <a th:href="@{/auth/register}" class="btn-register">Register</a>
-            </span>
+            <div class="nav-search">
+                <input type="text" class="nav-search-input" placeholder="Surah or 2:255…" autocomplete="off">
+            </div>
         </div>
     </nav>
     <main th:data-logged-in="${loggedIn}">
