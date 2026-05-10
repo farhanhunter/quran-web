@@ -14,7 +14,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -64,7 +67,7 @@ public class QuranController {
     @GetMapping("/juz/{juz}")
     public String getJuzPage(@PathVariable int juz, Model model) {
         if (juz < 1 || juz > 30) return "redirect:/quran/juz/1";
-        model.addAttribute("ayahs", quranService.getAyahsByJuz(juz));
+        model.addAttribute("sections", groupBySurah(quranService.getAyahsByJuz(juz)));
         model.addAttribute("juz", juz);
         model.addAttribute("prevJuz", juz > 1 ? juz - 1 : null);
         model.addAttribute("nextJuz", juz < 30 ? juz + 1 : null);
@@ -74,11 +77,27 @@ public class QuranController {
     @GetMapping("/page/{page}")
     public String getMushafPage(@PathVariable int page, Model model) {
         if (page < 1 || page > 604) return "redirect:/quran/page/1";
-        model.addAttribute("ayahs", quranService.getAyahsByPage(page));
+        model.addAttribute("sections", groupBySurah(quranService.getAyahsByPage(page)));
         model.addAttribute("page", page);
         model.addAttribute("prevPage", page > 1 ? page - 1 : null);
         model.addAttribute("nextPage", page < 604 ? page + 1 : null);
         return "quran/page";
+    }
+
+    private List<Map<String, Object>> groupBySurah(List<AyahDetailResponse> ayahs) {
+        List<Map<String, Object>> sections = new ArrayList<>();
+        for (AyahDetailResponse ayah : ayahs) {
+            if (sections.isEmpty() ||
+                    !((Integer) sections.get(sections.size() - 1).get("surahNumber")).equals(ayah.getSurahNumber())) {
+                Map<String, Object> section = new LinkedHashMap<>();
+                section.put("surahNumber", ayah.getSurahNumber());
+                section.put("surahName", ayah.getSurahName());
+                section.put("ayahs", new ArrayList<AyahDetailResponse>());
+                sections.add(section);
+            }
+            ((List<AyahDetailResponse>) sections.get(sections.size() - 1).get("ayahs")).add(ayah);
+        }
+        return sections;
     }
 
     /**

@@ -55,25 +55,19 @@
     <main>
         <div class="container">
             <div class="browse-list">
-                <th:block th:each="ayah, stat : ${ayahs}">
-                    <div th:if="${stat.first}" class="browse-surah-header">
-                        <a th:href="@{'/quran/surah/' + ${ayah.surahNumber}}"
-                           th:text="${ayah.surahNumber + '. ' + ayah.surahName}">1. Al-Fatihah</a>
+                <div th:each="section : ${sections}" class="browse-section">
+                    <div class="browse-surah-header">
+                        <a th:href="@{'/quran/surah/' + ${section.surahNumber}}"
+                           th:text="${section.surahNumber + '. ' + section.surahName}">1. Al-Fatihah</a>
                     </div>
-                    <div th:unless="${stat.first}"
-                         th:if="${ayah.surahNumber != ayahs[stat.index - 1].surahNumber}"
-                         class="browse-surah-header">
-                        <a th:href="@{'/quran/surah/' + ${ayah.surahNumber}}"
-                           th:text="${ayah.surahNumber + '. ' + ayah.surahName}">2. Al-Baqarah</a>
-                    </div>
-                    <div class="browse-ayah">
+                    <div th:each="ayah : ${section.ayahs}" class="browse-ayah">
                         <span class="browse-ayah__ref"
                               th:text="${ayah.surahNumber + ':' + ayah.ayahNumber}">1:1</span>
                         <p class="arabic browse-ayah__text" th:text="${ayah.textArabic}"></p>
                         <a th:href="@{'/quran/surah/' + ${ayah.surahNumber} + '#ayah-' + ${ayah.ayahNumber}}"
                            class="browse-ayah__link" title="Go to ayah">→</a>
                     </div>
-                </th:block>
+                </div>
             </div>
         </div>
     </main>
