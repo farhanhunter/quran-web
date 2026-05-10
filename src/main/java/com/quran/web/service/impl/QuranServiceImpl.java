@@ -61,6 +61,13 @@ public class QuranServiceImpl implements QuranService {
     }
 
     @Override
+    public List<AyahDetailResponse> getSajdaAyahs() {
+        return ayahRepository.findBySajdaTrueOrderBySurahIdAscAyahNumberAsc().stream()
+                .map(a -> quranMapper.toAyahDetailResponse(a, null))
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public SurahDetailResponse getSurahDetail(Integer surahNumber, String languageCode) {
         log.info("Fetching surah detail: {}, language: {}", surahNumber, languageCode);
 

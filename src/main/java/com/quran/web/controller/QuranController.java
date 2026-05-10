@@ -1,5 +1,6 @@
 package com.quran.web.controller;
 
+import com.quran.web.dto.response.AyahDetailResponse;
 import com.quran.web.dto.response.SurahDetailResponse;
 import com.quran.web.dto.response.SurahResponse;
 import com.quran.web.service.QuranService;
@@ -52,6 +53,13 @@ public class QuranController {
     @ResponseBody
     public List<SurahResponse> suggest() {
         return quranService.getAllSurahs();
+    }
+
+    @GetMapping("/sajda")
+    public String getSajdaAyahs(Model model) {
+        List<AyahDetailResponse> ayahs = quranService.getSajdaAyahs();
+        model.addAttribute("ayahs", ayahs);
+        return "quran/sajda";
     }
 
     /**

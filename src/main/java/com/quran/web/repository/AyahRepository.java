@@ -15,8 +15,6 @@ import java.util.Optional;
 @Repository
 public interface AyahRepository extends JpaRepository<Ayah, Long> {
 
-    Optional<Ayah> findBySurahAndAyahNumber(Surah surah, Integer ayahNumber);
-
     /**
      * ✅ OPTIMIZED: Eager load surah dengan JOIN FETCH
      * Menghindari N+1 query saat akses surah.nameLatin
@@ -80,5 +78,4 @@ public interface AyahRepository extends JpaRepository<Ayah, Long> {
     Page<Ayah> searchByArabicText(@Param("searchText") String searchText,
                                   Pageable pageable);
 
-    long countBySurah(Surah surah);
 }

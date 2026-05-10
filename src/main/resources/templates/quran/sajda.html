@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sajda Ayahs - Quran Web</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <script th:src="@{/js/search.js}" defer></script>
+</head>
+<body>
+    <nav class="main-nav">
+        <div class="nav-inner">
+            <button class="nav-toggle" aria-label="Menu" aria-expanded="false">
+                <span></span><span></span><span></span>
+            </button>
+            <div class="nav-links">
+                <a th:href="@{/}">Home</a>
+                <a th:href="@{/quran/surahs}">Quran</a>
+                <a th:href="@{/translations/languages}">Languages</a>
+                <a th:href="@{/health}">Health</a>
+                <a th:href="@{/quran/sajda}">Sajda</a>
+            </div>
+            <div class="nav-search">
+                <input type="text" class="nav-search-input" placeholder="Surah or 2:255…" autocomplete="off">
+            </div>
+        </div>
+    </nav>
+
+    <header>
+        <div class="container">
+            <a th:href="@{/quran/surahs}" class="back-link">← Back to Surah List</a>
+            <h1>Ayat Sajdah</h1>
+            <p style="margin:0.25rem 0 0; opacity:0.85; font-size:0.95rem;">
+                15 verses requiring prostration (sujud tilawah)
+            </p>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <div class="sajda-list">
+                <div th:each="ayah, stat : ${ayahs}" class="sajda-card">
+                    <div class="sajda-card__meta">
+                        <span class="sajda-card__number" th:text="${stat.index + 1}">1</span>
+                        <div>
+                            <div class="sajda-card__ref">
+                                <a th:href="@{'/quran/surah/' + ${ayah.surahNumber} + '#ayah-' + ${ayah.ayahNumber}}"
+                                   th:text="${ayah.surahName + ' (' + ayah.surahNumber + ':' + ayah.ayahNumber + ')'}">
+                                    Al-A'raf (7:206)
+                                </a>
+                            </div>
+                            <div class="sajda-card__info">
+                                Juz <span th:text="${ayah.juzNumber}">9</span>
+                                &bull;
+                                Page <span th:text="${ayah.pageNumber}">176</span>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="sajda-card__arabic arabic text-right" th:text="${ayah.textArabic}"></p>
+                    <a th:href="@{'/quran/surah/' + ${ayah.surahNumber} + '#ayah-' + ${ayah.ayahNumber}}"
+                       class="sajda-card__goto">Go to Ayah →</a>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>
