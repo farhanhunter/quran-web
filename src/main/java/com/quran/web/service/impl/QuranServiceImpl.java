@@ -68,6 +68,22 @@ public class QuranServiceImpl implements QuranService {
     }
 
     @Override
+    public List<AyahDetailResponse> getAyahsByJuz(int juz) {
+        if (juz < 1 || juz > 30) throw new InvalidRequestException("Juz must be between 1 and 30");
+        return ayahRepository.findByJuzNumberOrderBySurahIdAscAyahNumberAsc(juz).stream()
+                .map(a -> quranMapper.toAyahDetailResponse(a, null))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<AyahDetailResponse> getAyahsByPage(int page) {
+        if (page < 1 || page > 604) throw new InvalidRequestException("Page must be between 1 and 604");
+        return ayahRepository.findByPageNumberOrderBySurahIdAscAyahNumberAsc(page).stream()
+                .map(a -> quranMapper.toAyahDetailResponse(a, null))
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public SurahDetailResponse getSurahDetail(Integer surahNumber, String languageCode) {
         log.info("Fetching surah detail: {}, language: {}", surahNumber, languageCode);
 

@@ -10,6 +10,8 @@ public interface QuranService {
     List<SurahResponse> getAllSurahs();
     List<SurahResponse> searchSurahsByName(String name);
     List<AyahDetailResponse> getSajdaAyahs();
+    List<AyahDetailResponse> getAyahsByJuz(int juz);
+    List<AyahDetailResponse> getAyahsByPage(int page);
     SurahDetailResponse getSurahDetail(Integer surahNumber, String languageCode);
     AyahDetailResponse getAyahDetail(AyahQueryRequest request);
     PageResponse<AyahResponse> searchAyahs(SearchRequest request);

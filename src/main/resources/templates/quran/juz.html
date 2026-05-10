@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="'Juz ' + ${juz} + ' - Quran Web'">Juz 1 - Quran Web</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <script th:src="@{/js/search.js}" defer></script>
+</head>
+<body>
+    <nav class="main-nav">
+        <div class="nav-inner">
+            <button class="nav-toggle" aria-label="Menu" aria-expanded="false">
+                <span></span><span></span><span></span>
+            </button>
+            <div class="nav-links">
+                <a th:href="@{/}">Home</a>
+                <a th:href="@{/quran/surahs}">Quran</a>
+                <a th:href="@{/translations/languages}">Languages</a>
+                <a th:href="@{/health}">Health</a>
+                <a th:href="@{/quran/sajda}">Sajda</a>
+            </div>
+            <div class="nav-search">
+                <input type="text" class="nav-search-input" placeholder="Surah or 2:255…" autocomplete="off">
+            </div>
+        </div>
+    </nav>
+
+    <header>
+        <div class="container">
+            <a th:href="@{/quran/surahs}" class="back-link">← Surah List</a>
+            <h1 th:text="'Juz ' + ${juz}">Juz 1</h1>
+            <p style="margin:0.25rem 0 0; opacity:0.85; font-size:0.95rem;">
+                <span th:text="${ayahs.size()}">0</span> ayahs
+            </p>
+            <div class="browse-nav">
+                <a th:if="${prevJuz != null}" th:href="@{'/quran/juz/' + ${prevJuz}}"
+                   class="browse-nav__btn">← Juz <span th:text="${prevJuz}"></span></a>
+                <span th:if="${prevJuz == null}" class="browse-nav__btn browse-nav__btn--disabled">← Prev</span>
+
+                <form th:action="@{/quran/juz/1}" method="get" class="browse-nav__jump"
+                      onsubmit="this.action='/quran/juz/'+this.juzInput.value; return true;">
+                    <input name="juzInput" type="number" min="1" max="30"
+                           th:value="${juz}" class="browse-nav__input" aria-label="Jump to juz">
+                    <button type="submit" class="browse-nav__go">Go</button>
+                </form>
+
+                <a th:if="${nextJuz != null}" th:href="@{'/quran/juz/' + ${nextJuz}}"
+                   class="browse-nav__btn">Juz <span th:text="${nextJuz}"></span> →</a>
+                <span th:if="${nextJuz == null}" class="browse-nav__btn browse-nav__btn--disabled">Next →</span>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <div class="browse-list">
+                <th:block th:each="ayah, stat : ${ayahs}">
+                    <!-- Surah header: first ayah of juz -->
+                    <div th:if="${stat.first}" class="browse-surah-header">
+                        <a th:href="@{'/quran/surah/' + ${ayah.surahNumber}}"
+                           th:text="${ayah.surahNumber + '. ' + ayah.surahName}">1. Al-Fatihah</a>
+                    </div>
+                    <!-- Surah header: surah changed (safe — only when index >= 1) -->
+                    <div th:unless="${stat.first}"
+                         th:if="${ayah.surahNumber != ayahs[stat.index - 1].surahNumber}"
+                         class="browse-surah-header">
+                        <a th:href="@{'/quran/surah/' + ${ayah.surahNumber}}"
+                           th:text="${ayah.surahNumber + '. ' + ayah.surahName}">2. Al-Baqarah</a>
+                    </div>
+                    <!-- Ayah row -->
+                    <div class="browse-ayah">
+                        <span class="browse-ayah__ref"
+                              th:text="${ayah.surahNumber + ':' + ayah.ayahNumber}">1:1</span>
+                        <p class="arabic browse-ayah__text" th:text="${ayah.textArabic}"></p>
+                        <a th:href="@{'/quran/surah/' + ${ayah.surahNumber} + '#ayah-' + ${ayah.ayahNumber}}"
+                           class="browse-ayah__link" title="Go to ayah">→</a>
+                    </div>
+                </th:block>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

@@ -57,9 +57,28 @@ public class QuranController {
 
     @GetMapping("/sajda")
     public String getSajdaAyahs(Model model) {
-        List<AyahDetailResponse> ayahs = quranService.getSajdaAyahs();
-        model.addAttribute("ayahs", ayahs);
+        model.addAttribute("ayahs", quranService.getSajdaAyahs());
         return "quran/sajda";
+    }
+
+    @GetMapping("/juz/{juz}")
+    public String getJuzPage(@PathVariable int juz, Model model) {
+        if (juz < 1 || juz > 30) return "redirect:/quran/juz/1";
+        model.addAttribute("ayahs", quranService.getAyahsByJuz(juz));
+        model.addAttribute("juz", juz);
+        model.addAttribute("prevJuz", juz > 1 ? juz - 1 : null);
+        model.addAttribute("nextJuz", juz < 30 ? juz + 1 : null);
+        return "quran/juz";
+    }
+
+    @GetMapping("/page/{page}")
+    public String getMushafPage(@PathVariable int page, Model model) {
+        if (page < 1 || page > 604) return "redirect:/quran/page/1";
+        model.addAttribute("ayahs", quranService.getAyahsByPage(page));
+        model.addAttribute("page", page);
+        model.addAttribute("prevPage", page > 1 ? page - 1 : null);
+        model.addAttribute("nextPage", page < 604 ? page + 1 : null);
+        return "quran/page";
     }
 
     /**

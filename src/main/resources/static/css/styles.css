@@ -579,6 +579,135 @@ nav.main-nav a:hover {
     color: #fff;
 }
 
+/* ── Browse by Juz / Page ── */
+.browse-nav {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-top: 1rem;
+    flex-wrap: wrap;
+}
+
+.browse-nav__btn {
+    padding: 0.35rem 0.85rem;
+    border-radius: 20px;
+    border: 1.5px solid rgba(255,255,255,0.7);
+    color: #fff;
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 600;
+    transition: background 0.2s;
+    white-space: nowrap;
+}
+
+.browse-nav__btn:hover { background: rgba(255,255,255,0.2); }
+
+.browse-nav__btn--disabled {
+    opacity: 0.4;
+    cursor: default;
+}
+
+.browse-nav__jump {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.browse-nav__input {
+    width: 64px;
+    padding: 0.3rem 0.5rem;
+    border: 1.5px solid rgba(255,255,255,0.7);
+    border-radius: 8px;
+    background: transparent;
+    color: #fff;
+    font-size: 0.85rem;
+    text-align: center;
+}
+
+.browse-nav__input:focus { outline: none; background: rgba(255,255,255,0.15); }
+
+.browse-nav__go {
+    padding: 0.3rem 0.7rem;
+    border-radius: 8px;
+    border: 1.5px solid rgba(255,255,255,0.7);
+    background: transparent;
+    color: #fff;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.browse-nav__go:hover { background: rgba(255,255,255,0.2); }
+
+.browse-list {
+    margin-top: 1.5rem;
+}
+
+.browse-surah-header {
+    margin: 1.5rem 0 0.5rem;
+    padding-bottom: 0.4rem;
+    border-bottom: 2px solid #02978A;
+}
+
+.browse-surah-header:first-child { margin-top: 0; }
+
+.browse-surah-header a {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #02978A;
+    text-decoration: none;
+}
+
+.browse-surah-header a:hover { text-decoration: underline; }
+
+.browse-ayah {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 0.6rem 0.5rem;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.browse-ayah:hover { background: #f9fdfcz; }
+
+.browse-ayah__ref {
+    font-size: 0.78rem;
+    color: #fff;
+    background: #02978A;
+    border-radius: 12px;
+    padding: 0.15rem 0.5rem;
+    white-space: nowrap;
+    flex-shrink: 0;
+    margin-top: 0.4rem;
+    font-weight: 600;
+}
+
+.browse-ayah__text {
+    flex: 1;
+    font-size: 1.15rem;
+    line-height: 2;
+    margin: 0;
+    text-align: right;
+}
+
+.browse-ayah__link {
+    color: #02978A;
+    font-weight: 700;
+    text-decoration: none;
+    font-size: 1rem;
+    flex-shrink: 0;
+    padding: 0.2rem 0.4rem;
+    border-radius: 4px;
+    transition: background 0.2s;
+    margin-top: 0.3rem;
+}
+
+.browse-ayah__link:hover { background: #e8f7f5; }
+
+@media (max-width: 767px) {
+    .browse-ayah__text { font-size: 1rem; }
+}
+
 /* ── Sajda page ── */
 .sajda-list {
     display: flex;
