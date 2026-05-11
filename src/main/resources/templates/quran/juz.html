@@ -31,7 +31,7 @@
             <a th:href="@{/quran/surahs}" class="back-link">← Surah List</a>
             <h1 th:text="'Juz ' + ${juz}">Juz 1</h1>
             <p style="margin:0.25rem 0 0; opacity:0.85; font-size:0.95rem;">
-                <span th:text="${ayahs.size()}">0</span> ayahs
+                <span th:text="${totalAyahs}">0</span> ayahs
             </p>
             <div class="browse-nav">
                 <a th:if="${prevJuz != null}" th:href="@{'/quran/juz/' + ${prevJuz}}"

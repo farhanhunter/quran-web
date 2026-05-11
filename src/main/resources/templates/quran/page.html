@@ -31,7 +31,7 @@
             <a th:href="@{/quran/surahs}" class="back-link">← Surah List</a>
             <h1 th:text="'Mushaf Page ' + ${page}">Page 1</h1>
             <p style="margin:0.25rem 0 0; opacity:0.85; font-size:0.95rem;">
-                <span th:text="${ayahs.size()}">0</span> ayahs &bull; of 604 pages
+                <span th:text="${totalAyahs}">0</span> ayahs &bull; of 604 pages
             </p>
             <div class="browse-nav">
                 <a th:if="${prevPage != null}" th:href="@{'/quran/page/' + ${prevPage}}"

@@ -48,6 +48,7 @@ public interface AyahRepository extends JpaRepository<Ayah, Long> {
             @Param("juzNumber") Integer juzNumber
     );
 
+
     /**
      * ✅ OPTIMIZED: Batch load ayahs by page
      */

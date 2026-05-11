@@ -67,7 +67,9 @@ public class QuranController {
     @GetMapping("/juz/{juz}")
     public String getJuzPage(@PathVariable int juz, Model model) {
         if (juz < 1 || juz > 30) return "redirect:/quran/juz/1";
-        model.addAttribute("sections", groupBySurah(quranService.getAyahsByJuz(juz)));
+        List<AyahDetailResponse> ayahs = quranService.getAyahsByJuz(juz);
+        model.addAttribute("sections", groupBySurah(ayahs));
+        model.addAttribute("totalAyahs", ayahs.size());
         model.addAttribute("juz", juz);
         model.addAttribute("prevJuz", juz > 1 ? juz - 1 : null);
         model.addAttribute("nextJuz", juz < 30 ? juz + 1 : null);
@@ -77,7 +79,9 @@ public class QuranController {
     @GetMapping("/page/{page}")
     public String getMushafPage(@PathVariable int page, Model model) {
         if (page < 1 || page > 604) return "redirect:/quran/page/1";
-        model.addAttribute("sections", groupBySurah(quranService.getAyahsByPage(page)));
+        List<AyahDetailResponse> ayahs = quranService.getAyahsByPage(page);
+        model.addAttribute("sections", groupBySurah(ayahs));
+        model.addAttribute("totalAyahs", ayahs.size());
         model.addAttribute("page", page);
         model.addAttribute("prevPage", page > 1 ? page - 1 : null);
         model.addAttribute("nextPage", page < 604 ? page + 1 : null);
